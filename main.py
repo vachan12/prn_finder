@@ -13,10 +13,15 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 
-data_file = Path(__file__).parent / "data.json"
-with data_file.open("r", encoding="utf-8") as f:
-    records = json.load(f)
+# data_file = Path(__file__).parent / "data.json"
+# with data_file.open("r", encoding="utf-8") as f:
+#     records = json.load(f)
 
+data_file = Path(__file__).parent / "data.json"
+
+def load_records():
+    with data_file.open("r", encoding="utf-8") as f:
+        return json.load(f)
 
 def binary_search_records_by_prn_suffix(sorted_records: list[dict], target: int) -> list[dict]:
     keys = [int(rec.get("prn", "")[-2:]) if rec.get("prn", "").isdigit() and len(rec.get("prn", "")) >= 2 else -1 for rec in sorted_records]
@@ -44,6 +49,7 @@ def binary_search_records_by_prn_suffix(sorted_records: list[dict], target: int)
 
 
 def search_records(query: str):
+    records = load_records()
     query_text = query.strip().lower()
     if not query_text:
         return []
