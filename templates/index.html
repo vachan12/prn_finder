@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRN finder</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>PRN finder</h1>
+        <p>This is a simple website where Big data Anaytics students of CDAC Feb 2026 can find tehir PRN</p>
+        <form action="/" method="post">
+            <input class="input-box" type="text" name="query" value="{{ query | default('') }}" placeholder="Enter your name or PRN" required>
+            <button type="submit" class="search-button">Search</button>
+        </form>
+        {% if results is defined and results %}
+            <h2>Search Results for "{{ query }}":</h2>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>PRN</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                        <tr>
+                            <td>{{ result.prn }}</td>
+                            <td>{{ result.name }}</td>
+                            <td>{{ result.department }}</td>
+                            <td>{{ result.year }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% elif query is defined %}
+            <p>No records found for "{{ query }}".</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+    
